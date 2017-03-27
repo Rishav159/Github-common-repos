@@ -96,6 +96,7 @@
     $.when(firstmember,secondmember).done(function(fm,sm){
       fm = fm[0];
       sm = sm[0];
+      console.log(sm[0]);
       var repos = {};
       var total = 0;
       var common_followers = [];
@@ -113,7 +114,7 @@
 
       $('#total').html('<h4>'+total+'</h4>');
       for(var i = 0; i < common_followers.length; i++){
-        $('#repos').append('<li>'+common_followers[i].name+'</li>');
+        $('#repos').append('<li>'+common_followers[i].login+'</li>');
       }
       $('#repos').append('</ul>');
     });
