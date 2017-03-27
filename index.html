@@ -13,6 +13,8 @@
      <br>
       <input type="button" onclick='findCommonRepos()' value="Find out" class="butn"><br><br>
       <input type="button" onclick='findCommonfollowers()' value="Find Common followers" class="butn"><br><br>
+      <input type="button" onclick='findCommonfollowing()' value="Find Common following" class="butn"><br><br>
+
     </div>
     <div id = "total">
 
@@ -119,5 +121,43 @@
       $('#repos').append('</ul>');
     });
   }
+  function findCommonfollowing() {
+    var first = $('#first').val();
+    var second = $('#second').val();
+    var firstmember = $.ajax({
+      url : 'https://api.github.com/users/'+first+'/following',
+      method : 'GET'
+    });
+    var secondmember = $.ajax({
+      url : 'https://api.github.com/users/'+second+'/following',
+      method : 'GET'
+    });
+    $.when(firstmember,secondmember).done(function(fm,sm){
+      fm = fm[0];
+      sm = sm[0];
+      console.log(sm[0]);
+      var repos = {};
+      var total = 0;
+      var common_following = [];
+      for(var i = 0; i < fm.length; i++){
+        repos[fm[i].id] = fm[i];
+      }
+      for(var i = 0; i < sm.length; i++){
+        if(repos[sm[i].id]){
+          total++;
+          common_following.push(sm[i]);
+        }
+      }
+      $('#total').html('');
+      $('#repos').html('<ul>');
+
+      $('#total').html('<h4>'+total+'</h4>');
+      for(var i = 0; i < common_following.length; i++){
+        $('#repos').append('<li>'+common_following[i].login+'</li>');
+      }
+      $('#repos').append('</ul>');
+    });
+  }
+
   </script>
 </html>
