@@ -11,10 +11,9 @@
       First : <input id='first' type="text" name="1" value=""><br>
     Second : <input id = 'second' type="text" name="1" value=""><br>
      <br>
-      <input type="button" onclick='findCommonRepos()' value="Find out" class="butn"><br><br>
-      <input type="button" onclick='findCommonfollowers()' value="Find Common followers" class="butn"><br><br>
-      <input type="button" onclick='findCommonfollowing()' value="Find Common following" class="butn"><br><br>
-
+      <input type="button" onclick='findCommonRepos()' value="Find Common Repos" class="butn"><img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading"><br>
+      <input type="button" onclick='findCommonfollowers()' value="Find Common followers" class="butn"><img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading"><br>
+      <input type="button" onclick='findCommonfollowing()' value="Find Common following" class="butn"><img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading"><br>
     </div>
     <div id = "total">
 
@@ -29,6 +28,7 @@
   <script type="text/javascript" src='jquery.js'></script>
   <script type="text/javascript">
   function findCommonRepos(){
+    $('#loading').show();
     var first = $('#first').val();
     var second = $('#second').val();
     var firstmember = $.ajax({
@@ -48,6 +48,7 @@
       method : 'GET'
     });
     $.when(firstmember,firstowner,secondmember,secondowner).done(function(fm,fo,sm,so){
+      $('#loading').hide();
       fm = fm[0];
       fo = fo[0];
       sm = sm[0];
@@ -85,6 +86,7 @@
     });
   }
   function findCommonfollowers() {
+    $('#loading').show();
     var first = $('#first').val();
     var second = $('#second').val();
     var firstmember = $.ajax({
@@ -96,6 +98,7 @@
       method : 'GET'
     });
     $.when(firstmember,secondmember).done(function(fm,sm){
+      $('#loading').hide();
       fm = fm[0];
       sm = sm[0];
       console.log(sm[0]);
@@ -122,6 +125,7 @@
     });
   }
   function findCommonfollowing() {
+    $('#loading').show();
     var first = $('#first').val();
     var second = $('#second').val();
     var firstmember = $.ajax({
@@ -133,6 +137,7 @@
       method : 'GET'
     });
     $.when(firstmember,secondmember).done(function(fm,sm){
+      $('#loading').hide();
       fm = fm[0];
       sm = sm[0];
       console.log(sm[0]);
