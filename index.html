@@ -1,169 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Github Common Repositories</title>
-    <link rel="stylesheet" href="index.css">
-  </head>
-  <body>
-    <br>
-    <div id='wrapper'>
-      First : <input id='first' type="text" name="1" value=""><br>
-    Second : <input id = 'second' type="text" name="1" value=""><br>
-     <br>
-      <input type="button" onclick='findCommonRepos()' value="Find Common Repos" class="butn"><br>
-      <input type="button" onclick='findCommonfollowers()' value="Find Common followers" class="butn"><br>
-      <input type="button" onclick='findCommonfollowing()' value="Find Common following" class="butn">
-      <img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading"><br>
-    </div>
-    <div id = "total">
-
-    </div>
-    <div id="repos">
-
-    </div>
-    <div id="repos">
-
-    </div>
-  </body>
-  <script type="text/javascript" src='jquery.js'></script>
-  <script type="text/javascript">
-  function findCommonRepos(){
-    $('#loading').show();
-    var first = $('#first').val();
-    var second = $('#second').val();
-    var firstmember = $.ajax({
-      url : 'https://api.github.com/users/'+first+'/repos?type=member',
-      method : 'GET'
-    });
-    var firstowner = $.ajax({
-      url : 'https://api.github.com/users/'+first+'/repos?type=owner',
-      method : 'GET'
-    });
-    var secondmember = $.ajax({
-      url : 'https://api.github.com/users/'+second+'/repos?type=member',
-      method : 'GET'
-    });
-    var secondowner = $.ajax({
-      url : 'https://api.github.com/users/'+second+'/repos?type=owner',
-      method : 'GET'
-    });
-    $.when(firstmember,firstowner,secondmember,secondowner).done(function(fm,fo,sm,so){
-      $('#loading').hide();
-      fm = fm[0];
-      fo = fo[0];
-      sm = sm[0];
-      so = so[0];
-      console.log("All done");
-      var repos = {};
-      var total = 0;
-      var common_repos = [];
-      for(var i = 0; i < fm.length; i++){
-        repos[fm[i].id] = fm[i];
-      }
-      for(var i = 0; i < fo.length; i++){
-        repos[fo[i].id] = fo[i];
-      }
-      for(var i = 0; i < sm.length; i++){
-        if(repos[sm[i].id]){
-          total++;
-          common_repos.push(sm[i]);
-        }
-      }
-      for(var i = 0; i < so.length; i++){
-        if(repos[so[i].id]){
-          total++;
-          common_repos.push(so[i]);
-        }
-      }
-      $('#total').html('');
-      $('#repos').html('<ul>');
-
-      $('#total').html('<h4>'+total+'</h4>');
-      for(var i = 0; i < common_repos.length; i++){
-        $('#repos').append('<li>'+common_repos[i].name+'</li>');
-      }
-      $('#repos').append('</ul>');
-    });
-  }
-  function findCommonfollowers() {
-    $('#loading').show();
-    var first = $('#first').val();
-    var second = $('#second').val();
-    var firstmember = $.ajax({
-      url : 'https://api.github.com/users/'+first+'/followers',
-      method : 'GET'
-    });
-    var secondmember = $.ajax({
-      url : 'https://api.github.com/users/'+second+'/followers',
-      method : 'GET'
-    });
-    $.when(firstmember,secondmember).done(function(fm,sm){
-      $('#loading').hide();
-      fm = fm[0];
-      sm = sm[0];
-      console.log(sm[0]);
-      var repos = {};
-      var total = 0;
-      var common_followers = [];
-      for(var i = 0; i < fm.length; i++){
-        repos[fm[i].id] = fm[i];
-      }
-      for(var i = 0; i < sm.length; i++){
-        if(repos[sm[i].id]){
-          total++;
-          common_followers.push(sm[i]);
-        }
-      }
-      $('#total').html('');
-      $('#repos').html('<ul>');
-
-      $('#total').html('<h4>'+total+'</h4>');
-      for(var i = 0; i < common_followers.length; i++){
-        $('#repos').append('<li>'+common_followers[i].login+'</li>');
-      }
-      $('#repos').append('</ul>');
-    });
-  }
-  function findCommonfollowing() {
-    $('#loading').show();
-    var first = $('#first').val();
-    var second = $('#second').val();
-    var firstmember = $.ajax({
-      url : 'https://api.github.com/users/'+first+'/following',
-      method : 'GET'
-    });
-    var secondmember = $.ajax({
-      url : 'https://api.github.com/users/'+second+'/following',
-      method : 'GET'
-    });
-    $.when(firstmember,secondmember).done(function(fm,sm){
-      $('#loading').hide();
-      fm = fm[0];
-      sm = sm[0];
-      console.log(sm[0]);
-      var repos = {};
-      var total = 0;
-      var common_following = [];
-      for(var i = 0; i < fm.length; i++){
-        repos[fm[i].id] = fm[i];
-      }
-      for(var i = 0; i < sm.length; i++){
-        if(repos[sm[i].id]){
-          total++;
-          common_following.push(sm[i]);
-        }
-      }
-      $('#total').html('');
-      $('#repos').html('<ul>');
-
-      $('#total').html('<h4>'+total+'</h4>');
-      for(var i = 0; i < common_following.length; i++){
-        $('#repos').append('<li>'+common_following[i].login+'</li>');
-      }
-      $('#repos').append('</ul>');
-    });
-  }
-
-  </script>
+   <head>
+      <meta charset="utf-8">
+      <title>Github Common</title>
+      <link rel="stylesheet" href="index.css">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <!-- Optional theme -->
+      <!-- <link rel="stylesheet" href="css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+   </head>
+   <body>
+      <!--Navigation Bar-->
+      <div class="container-fluid">
+         <div class="row">
+            <nav class="navbar navbar-inverse">
+               <div class="navbar-header">
+                  <a class="navbar-brand" href="#">GITHUB COMMON</a>
+               </div>
+            </nav>
+         </div>
+         <div class="row text-center" style="margin-top:5%;">
+            <h2>Github Handles</h2>
+         </div>
+         <div class="row" style="margin-top:5%;">
+            <div class="col col-lg-4 col-sm-12 col-sm-offset-2 text-center">
+               <input type="text" id='first' name="1" class="form-control input-lg col-lg-4" placeholder="First">
+            </div>
+            <div class="col col-lg-4 col-sm-12 text-center">
+               <input type="text" id ='second' name="1" class="form-control input-lg col-lg-4" placeholder="Second">
+            </div>
+         </div>
+         <div class="row text-center"style="margin-top:10%;">
+            <button id="submitbtn" type="button" class="btn btn-warning btn-lg" onclick="common()">SUBMIT</button>
+         </div>
+      </div>
+   </body>
+   <script src="js/jquery.min.js"></script>
+   <!-- Latest compiled and minified JavaScript -->
+   <script src="js/bootstrap.min.js"></script>
+   <script type="text/javascript">
+      document.getElementById("submitbtn").onclick = function () {
+        var firstval = $('#first').val();
+        var secondval = $('#second').val();
+       location.href = "http://localhost:8000/next.html?first="+firstval+"&second="+secondval;
+      };
+   </script>
 </html>
