@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
   <head>
     <meta charset="utf-8">
     <title>Github Common Repositories</title>
@@ -165,4 +166,51 @@
   }
 
   </script>
+=======
+   <head>
+      <meta charset="utf-8">
+      <title>Github Common</title>
+      <link rel="stylesheet" href="index.css">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <!-- Optional theme -->
+      <!-- <link rel="stylesheet" href="css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+   </head>
+   <body>
+      <!--Navigation Bar-->
+      <div class="container-fluid">
+         <div class="row">
+            <nav class="navbar navbar-inverse">
+               <div class="navbar-header">
+                  <a class="navbar-brand" href="#">GITHUB COMMON</a>
+               </div>
+            </nav>
+         </div>
+         <div class="row text-center" style="margin-top:5%;">
+            <h2>Github Handles</h2>
+         </div>
+         <div class="row" style="margin-top:5%;">
+            <div class="col col-lg-4 col-sm-12 col-sm-offset-2 text-center">
+               <input type="text" id='first' name="1" class="form-control input-lg col-lg-4" placeholder="First">
+            </div>
+            <div class="col col-lg-4 col-sm-12 text-center">
+               <input type="text" id ='second' name="1" class="form-control input-lg col-lg-4" placeholder="Second">
+            </div>
+         </div>
+         <div class="row text-center"style="margin-top:10%;">
+            <button id="submitbtn" type="button" class="btn btn-warning btn-lg" onclick="common()">SUBMIT</button>
+         </div>
+      </div>
+   </body>
+   <script src="js/jquery.min.js"></script>
+   <!-- Latest compiled and minified JavaScript -->
+   <script src="js/bootstrap.min.js"></script>
+   <script type="text/javascript">
+      document.getElementById("submitbtn").onclick = function () {
+        var firstval = $('#first').val();
+        var secondval = $('#second').val();
+       location.href = "http://localhost:8000/next.html?first="+firstval+"&second="+secondval;
+      };
+   </script>
+>>>>>>> e74b2c106fba3b557abf06d8a38345b8baa7aec2
 </html>

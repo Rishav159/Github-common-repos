@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>Github Common</title>
+      <link rel="stylesheet" href="index.css">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <!-- Optional theme -->
+      <!-- <link rel="stylesheet" href="css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+   </head>
+   <body>
+      <div class="container-fluid">
+      <div class="row">
+         <nav class="navbar navbar-inverse">
+            <div class="navbar-header">
+               <a class="navbar-brand" href="#">GITHUB COMMON</a>
+            </div>
+         </nav>
+      </div>
+      <div class="row">
+         <div class="col-lg-4 text-center" style="background-color:lavender;">
+            <h4>
+            Common Repository
+            <h4>
+         </div>
+         <div class="col-lg-4 text-center" style="background-color:lavenderblush;">
+            <h4>
+            Common Following
+            <h4>
+         </div>
+         <div class="col-lg-4 text-center" style="background-color:lavender;">
+            <h4>
+            Common Followers
+            <h4>
+         </div>
+      </div>
+      <div class="row">
+         <div id="repository" class="col-lg-4 text-center" style="background-color:lavenderblush;height:28em">
+            <img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading1">
+         </div>
+         <div id="following" class="col-lg-4 text-center" style="background-color:lavender;height:28em">
+            <img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading2">
+         </div>
+         <div id="follower" class="col-lg-4 text-center" style="background-color:lavenderblush;height:28em">
+            <img src="images/rolling.svg" style="display:none;width:15px;height:auto" id="loading3">
+         </div>
+         <div class="row">
+            <div class="col-lg-12" style="background-color:white;height:3em"></div>
+         </div>
+         <div class="row text-center">
+            <a href="index.html"><button type="button" class="btn btn-warning btn-lg">BACK</button></a>
+         </div>
+      </div>
+   </body>
+   <script src="js/jquery.min.js"></script>
+   <!-- Latest compiled and minified JavaScript -->
+   <script src="js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   <script type="text/javascript">
+      function qs() {
+        var query, param_string, params, single_param;
+        params = {};
+
+        query = location.search.substring(1);
+        param_string = query.split('&');
+        for(var i=0;i<param_string.length;i++){
+          single_param = param_string[i].split('=');
+          params[single_param[0]] = single_param[1];
+
+        }
+        var myArray = new Array(3),k;
+        k=0;
+        for(var key in params) {
+            myArray[k] = params[key];
+            k=k+1;
+        }
+
+          var firstval = myArray[0];
+          var secondval = myArray[1];
+          console.log(firstval);
+          console.log(secondval);
+          findCommonRepos();
+          findCommonfollowers();
+          findCommonfollowing();
+        function findCommonRepos(){
+        $('#loading1').show();
+        var first = firstval;
+        var second = secondval;
+        var firstmember = $.ajax({
+          url : 'https://api.github.com/users/'+first+'/repos?type=member?access_token=341baa11229996bb868a8b94d7a950f494af7f00',
+          method : 'GET'
+        });
+        var firstowner = $.ajax({
+          url : 'https://api.github.com/users/'+first+'/repos?type=owner?access_token=341baa11229996bb868a8b94d7a950f494af7f00',
+          method : 'GET'
+        });
+        var secondmember = $.ajax({
+          url : 'https://api.github.com/users/'+second+'/repos?type=member?access_token=341baa11229996bb868a8b94d7a950f494af7f00',
+          method : 'GET'
+        });
+        var secondowner = $.ajax({
+          url : 'https://api.github.com/users/'+second+'/repos?type=owner?access_token=341baa11229996bb868a8b94d7a950f494af7f00',
+          method : 'GET'
+        });
+        $.when(firstmember,firstowner,secondmember,secondowner).done(function(fm,fo,sm,so){
+          $('#loading1').hide();
+          fm = fm[0];
+          fo = fo[0];
+          sm = sm[0];
+          so = so[0];
+          console.log("All done");
+          var repos = {};
+          var total = 0;
+          var common_repos = [];
+          for(var i = 0; i < fm.length; i++){
+            repos[fm[i].id] = fm[i];
+          }
+          for(var i = 0; i < fo.length; i++){
+            repos[fo[i].id] = fo[i];
+          }
+          for(var i = 0; i < sm.length; i++){
+            if(repos[sm[i].id]){
+              total++;
+              common_repos.push(sm[i]);
+            }
+          }
+          for(var i = 0; i < so.length; i++){
+            if(repos[so[i].id]){
+              total++;
+              common_repos.push(so[i]);
+            }
+          }
+          $('#repository').html('');
+
+
+          $('#repository').html('<h4>'+total+'</h4>');
+          for(var i = 0; i < common_repos.length; i++){
+            $('#repository').append(common_repos[i].name+'<br>');
+          }
+
+        });
+      }
+
+      function findCommonfollowers() {
+        $('#loading3').show();
+        var first = firstval;
+        var second = secondval;
+        var firstmember = $.ajax({
+          url : 'https://api.github.com/users/'+first+'/followers',
+          method : 'GET'
+        });
+        var secondmember = $.ajax({
+          url : 'https://api.github.com/users/'+second+'/followers',
+          method : 'GET'
+        });
+        $.when(firstmember,secondmember).done(function(fm,sm){
+          $('#loading3').hide();
+          fm = fm[0];
+          sm = sm[0];
+          console.log(sm[0]);
+          var repos = {};
+          var total = 0;
+          var common_followers = [];
+          for(var i = 0; i < fm.length; i++){
+            repos[fm[i].id] = fm[i];
+          }
+          for(var i = 0; i < sm.length; i++){
+            if(repos[sm[i].id]){
+              total++;
+              common_followers.push(sm[i]);
+            }
+          }
+          $('#follower').html('');
+
+
+          $('#follower').html('<h4>'+total+'</h4>');
+          for(var i = 0; i < common_followers.length; i++){
+            $('#follower').append(common_followers[i].login+'<br>');
+          }
+
+        });
+      }
+
+      function findCommonfollowing() {
+      $('#loading2').show();
+      var first = firstval;
+      var second = secondval;
+      var firstmember = $.ajax({
+        url : 'https://api.github.com/users/'+first+'/following',
+        method : 'GET'
+      });
+      var secondmember = $.ajax({
+        url : 'https://api.github.com/users/'+second+'/following',
+        method : 'GET'
+      });
+      $.when(firstmember,secondmember).done(function(fm,sm){
+        $('#loading2').hide();
+        fm = fm[0];
+        sm = sm[0];
+        console.log(sm[0]);
+        var repos = {};
+        var total = 0;
+        var common_following = [];
+        for(var i = 0; i < fm.length; i++){
+          repos[fm[i].id] = fm[i];
+        }
+        for(var i = 0; i < sm.length; i++){
+          if(repos[sm[i].id]){
+            total++;
+            common_following.push(sm[i]);
+          }
+        }
+        $('#following').html('');
+
+
+        $('#following').html('<h4>'+total+'</h4>');
+        for(var i = 0; i < common_following.length; i++){
+          $('#following').append(common_following[i].login+'<br>');
+        }
+
+      });
+      }
+
+
+      }
+      qs();
+   </script>
+</html>
